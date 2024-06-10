@@ -19,10 +19,7 @@ const ad_skip_span = [
 ]
 
 // 重新整理網頁
-const ad_b_window_attr = {
-    closeADBW :"允許放送 YouTube 廣告",
-    reload:"重新整理網頁"
-}
+const ad_b_window_attr = ["允許放送 YouTube 廣告","重新整理網頁"]
 
 const videoDiv = "html5-video-container"
 
@@ -52,7 +49,7 @@ if (url.indexOf("youtube") > -1) {
         }
 
         for(const e of ad_b_window_attr ){
-            const elements = document.querySelectorAll(`[aria-label=${e}]`);
+            const elements = document.querySelectorAll(`[aria-label='${e}']`);
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb")
                 elements[0].click()
