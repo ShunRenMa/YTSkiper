@@ -70,17 +70,18 @@ if (url.indexOf("youtube") > -1) {
             const elements = document.getElementsByClassName(e);
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb iframe ",elements[0])
-               
-                elements[0].remove()
-                const video = document.getElementsByClassName(videoDiv)[0].getElementsByTagName("video")[0];
+                window.location.reload();
+                break;
+                // elements[0].remove()
+                // const video = document.getElementsByClassName(videoDiv)[0].getElementsByTagName("video")[0];
                 
-                setInterval((i) => {
-                    if(video?.paused){
-                        video.play();
-                    }else{
-                        clearInterval(i);
-                    }
-                },500);
+                // setInterval((i) => {
+                //     if(video?.paused){
+                //         video.play();
+                //     }else{
+                //         clearInterval(i);
+                //     }
+                // },500);
                
             }
         }
