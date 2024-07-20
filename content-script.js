@@ -68,21 +68,12 @@ if (url.indexOf("youtube") > -1) {
 
         for (const e of adb_iframe_div_class) {
             const elements = document.getElementsByClassName(e);
+            const video = document.querySelector(`.${videoDiv} video`);
+            video && console.log("video c = ",video.currentTime);
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb iframe ",elements[0])
-                window.location.reload();
+                window.location.href = window.location.href.replace(/&t=\d+s/, '');
                 break;
-                // elements[0].remove()
-                // const video = document.getElementsByClassName(videoDiv)[0].getElementsByTagName("video")[0];
-                
-                // setInterval((i) => {
-                //     if(video?.paused){
-                //         video.play();
-                //     }else{
-                //         clearInterval(i);
-                //     }
-                // },500);
-               
             }
         }
         
