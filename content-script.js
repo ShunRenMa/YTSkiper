@@ -31,9 +31,11 @@ const bg_block_cover_tag = "tp-yt-iron-overlay-backdrop";
 const adb_iframe_div_class = ['fc-whitelist-dialog']
 
 const url = window.location.href
-
+let hasAD = false;
+let videoCurrentTime = 0;
 if (url.indexOf("youtube") > -1) {
     setInterval(() => {
+
         for (const e of ad_skip_span) {
             let ad_skip_area = document.getElementsByClassName(e)
             if (ad_skip_area[0]) {
@@ -43,6 +45,7 @@ if (url.indexOf("youtube") > -1) {
                     if (video) {
                         console.log("[tracking] ad skip time")
                         video.currentTime = 1000;
+                        hasAD = true;
                     }
                 }
             }
@@ -53,6 +56,7 @@ if (url.indexOf("youtube") > -1) {
             if (elements?.[0]) {
                 console.log("[tracking] ad skip click")
                 elements[0].click()
+                hasAD = true;
             }
         }
 
@@ -61,6 +65,7 @@ if (url.indexOf("youtube") > -1) {
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb ",elements[0])
                 elements[0].click()
+                hasAD = true;
             }
         }
 
@@ -69,16 +74,27 @@ if (url.indexOf("youtube") > -1) {
         for (const e of adb_iframe_div_class) {
             const elements = document.getElementsByClassName(e);
             const video = document.querySelector(`.${videoDiv} video`);
-            video && console.log("video c = ",video.currentTime);
+          
+            if(video && !hasAD){
+                videoCurrentTime = video.currentTime === 0 ? videoCurrentTime : video.currentTime;
+                console.log("video c = ",videoCurrentTime);
+            }
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb iframe ",elements[0])
-                window.location.href = window.location.href.replace(/&t=\d+s/, '');
+                window.location.href = `${window.location.href.replace(/&t=\d+s/, '')}&t=${Math.ceil(videoCurrentTime)}s`;
                 break;
             }
         }
-        
+
+        hasAD = false;
         document.getElementsByTagName(bg_block_cover_tag)[0]?.remove();
-      
 
     }, 250)
+}
+
+function setBodyOverflow() {
+    window.requestAnimationFrame(() => {
+        document.body.style.setProperty('overflow', '', 'important');
+        setBodyOverflow(); 
+    });
 }
