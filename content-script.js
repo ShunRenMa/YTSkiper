@@ -81,7 +81,9 @@ if (url.indexOf("youtube") > -1) {
             }
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb iframe ",elements[0])
-                window.location.href = `${window.location.href.replace(/&t=\d+s/, '')}&t=${Math.ceil(videoCurrentTime)}s`;
+                const targetTimeParam = `&t=${Math.ceil(videoCurrentTime)}s`;
+                const isLive = !!document.querySelector(".ytp-live");
+                window.location.href = `${window.location.href.replace(/&t=\d+s/, '')}${isLive ? '' : targetTimeParam}`;
                 break;
             }
         }
