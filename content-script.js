@@ -20,7 +20,7 @@ const ad_skip_span = [
 
 // ADB 第一頁
 // const ad_b_window_attr = ["允許放送 YouTube 廣告","重新整理網頁"]
-const ad_b_window_attr = ["允許放送 YouTube 廣告"]
+const ad_b_window_attr = ["允許放送 YouTube 廣告",'贊助商廣告']
 
 const videoDiv = "html5-video-container";
 
@@ -29,6 +29,7 @@ const bg_block_cover_tag = "tp-yt-iron-overlay-backdrop";
 
 // ADB iframe
 const adb_iframe_div_class = ['fc-whitelist-dialog']
+// video-ads
 
 const url = window.location.href
 let hasAD = false;
@@ -36,35 +37,22 @@ let videoCurrentTime = 0;
 if (url.indexOf("youtube") > -1) {
     setInterval(() => {
 
-        for (const e of ad_skip_span) {
-            let ad_skip_area = document.getElementsByClassName(e)
-            if (ad_skip_area[0]) {
-                const divs = document.getElementsByClassName(videoDiv)
-                for (const div of divs) {
-                    let video = div?.getElementsByTagName("video")[0];
-                    if (video) {
-                        console.log("[tracking] ad skip time")
-                        video.currentTime = 1000;
-                        hasAD = true;
-                    }
-                }
-            }
-        }
-
-        for (const e of ad_skip) {
-            const elements = document.getElementsByClassName(e);
-            if (elements?.[0]) {
-                console.log("[tracking] ad skip click")
-                elements[0].click()
-                hasAD = true;
-            }
-        }
+        // for (const e of ad_skip) {
+        //     const elements = document.getElementsByClassName(e);
+        //     if (elements?.[0]) {
+        //         // console.log("[tracking] ad skip click")
+        //         // elements[0].click()
+        //         // findVideoAndSetTimeToSkip()
+        //         // hasAD = true;
+        //     }
+        // }
 
         for(const e of ad_b_window_attr ){
             const elements = document.querySelectorAll(`[aria-label='${e}']`);
             if (elements?.[0]) {
                 console.log("[tracking] ad skip for adb ",elements[0])
-                elements[0].click()
+                // elements[0].click()
+                findVideoAndSetTimeToSkip()
                 hasAD = true;
             }
         }
@@ -75,7 +63,7 @@ if (url.indexOf("youtube") > -1) {
             const elements = document.getElementsByClassName(e);
             const video = document.querySelector(`.${videoDiv} video`);
           
-            if(video && !hasAD){
+            if(video && hasAD){
                 videoCurrentTime = video.currentTime === 0 ? videoCurrentTime : video.currentTime;
                 console.log("video c = ",videoCurrentTime);
             }
@@ -94,9 +82,25 @@ if (url.indexOf("youtube") > -1) {
     }, 250)
 }
 
+
+function findVideoAndSetTimeToSkip() {
+    const divs = document.getElementsByClassName(videoDiv)
+    for (const div of divs) {
+        let video = div?.getElementsByTagName("video")[0];
+        if (video) {
+            console.log("[tracking] ad skip time")
+            video.currentTime = 1000;
+            hasAD = true;
+        }
+    }
+
+}
+
 function setBodyOverflow() {
     window.requestAnimationFrame(() => {
         document.body.style.setProperty('overflow', '', 'important');
         setBodyOverflow(); 
     });
 }
+
+// document.getElementsByClassName("ytp-ad-skip-button-modern ytp-button")[0]?.click()
